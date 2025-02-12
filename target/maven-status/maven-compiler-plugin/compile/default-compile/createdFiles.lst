@@ -2,6 +2,7 @@ liquorstoremanagement\utils\PasswordUtils.class
 com\mycompany\wineapp\StaffDashboard.class
 liquorstoremanagement\ui\ProductManagementForm.class
 liquorstoremanagement\dao\OrderDAO.class
+liquorstoremanagement\ui\LoginForm$4.class
 liquorstoremanagement\ui\UserManagementForm.class
 com\mycompany\wineapp\WineApp$1.class
 com\mycompany\wineapp\Dashboard.class
@@ -24,11 +25,14 @@ liquorstoremanagement\model\Supplier.class
 liquorstoremanagement\ui\ProductDialog.class
 liquorstoremanagement\model\Product.class
 liquorstoremanagement\model\User.class
+liquorstoremanagement\ui\LoginForm$3.class
 liquorstoremanagement\ui\LoginForm$1.class
 liquorstoremanagement\model\Order.class
 liquorstoremanagement\ui\RegistrationForm.class
+liquorstoremanagement\ui\LoginForm$GradientButton.class
 liquorstoremanagement\ui\ProductDialog$1.class
 liquorstoremanagement\dao\SaleDAO.class
 liquorstoremanagement\ui\LoginForm.class
 liquorstoremanagement\ui\RegistrationForm$1.class
 liquorstoremanagement\model\Sale.class
+liquorstoremanagement\ui\LoginForm$RoundedPanel.class

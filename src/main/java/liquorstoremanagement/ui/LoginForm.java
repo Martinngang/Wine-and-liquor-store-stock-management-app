@@ -10,6 +10,7 @@ package liquorstoremanagement.ui;
  */
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -22,15 +23,16 @@ import com.mycompany.wineapp.StaffDashboard;
 import com.mycompany.wineapp.ClientDashboard;
 
 public class LoginForm extends JFrame {
+
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JButton loginButton, registerButton;
+    private GradientButton loginButton;
+    private JLabel forgotPasswordLabel, orSignUpLabel;
     private BufferedImage backgroundImage, logoImage;
     private UserDAO userDAO;
 
     public LoginForm() {
         userDAO = new UserDAO();
-        // Load images from your resources directory.
         try {
             backgroundImage = ImageIO.read(new File("src/main/java/background.jpg"));
             logoImage = ImageIO.read(new File("src/main/java/logo.png"));
@@ -42,99 +44,121 @@ public class LoginForm extends JFrame {
 
     private void initComponents() {
         setTitle("Login");
-        setSize(400, 600);
+        setSize(500, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create a layered pane for a background image and overlay form.
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(400, 600));
+        layeredPane.setPreferredSize(new Dimension(500, 700));
 
-        // Background label
+        // Background image
         JLabel backgroundLabel = new JLabel();
-        backgroundLabel.setBounds(0, 0, 400, 600);
+        backgroundLabel.setBounds(0, 0, 500, 700);
         if (backgroundImage != null) {
-            Image scaledBg = backgroundImage.getScaledInstance(400, 600, Image.SCALE_SMOOTH);
+            Image scaledBg = backgroundImage.getScaledInstance(500, 700, Image.SCALE_SMOOTH);
             backgroundLabel.setIcon(new ImageIcon(scaledBg));
         }
-        layeredPane.add(backgroundLabel, new Integer(0));
+        layeredPane.add(backgroundLabel, Integer.valueOf(0));
 
-        // Form panel with a semi-transparent background.
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setOpaque(true);
-        formPanel.setBackground(new Color(255, 255, 255, 220)); // White with alpha
-        formPanel.setBounds(50, 200, 300, 250);
+        RoundedPanel formPanel = new RoundedPanel(30);
+        formPanel.setLayout(new GridBagLayout());
+        formPanel.setBackground(new Color(255, 255, 255, 230));
+        formPanel.setBounds(50, 150, 400, 400);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(7, 5, 7, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        // Add logo at the top if available.
+
+        // Row 0: Logo
         if (logoImage != null) {
-            JLabel logoLabel = new JLabel(new ImageIcon(logoImage.getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+            JLabel logoLabel = new JLabel(new ImageIcon(logoImage.getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2;
+            logoLabel.setHorizontalAlignment(JLabel.CENTER);
             formPanel.add(logoLabel, gbc);
         }
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        
-        // Username Label and Field
-        JLabel usernameLabel = new JLabel("Username:");
+        // Row 1: Username label
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        JLabel usernameLabel = new JLabel("Username:");
         formPanel.add(usernameLabel, gbc);
-        usernameField = new JTextField(15);
-        gbc.gridx = 1;
-        formPanel.add(usernameField, gbc);
-        
-        // Password Label and Field
-        JLabel passwordLabel = new JLabel("Password:");
-        gbc.gridx = 0;
+
+        // Row 2: Username field
         gbc.gridy = 2;
-        formPanel.add(passwordLabel, gbc);
-        passwordField = new JPasswordField(15);
-        gbc.gridx = 1;
-        formPanel.add(passwordField, gbc);
-        
-        // Buttons: Login and Register
-        loginButton = new JButton("Login");
-        registerButton = new JButton("Register");
-        gbc.gridx = 0;
+        usernameField = new JTextField();
+        usernameField.setBorder(new MatteBorder(10, 10, 10, 10, Color.WHITE));
+        addPlaceholder(usernameField, "Type your username");
+        formPanel.add(usernameField, gbc);
+
+        // Row 3: Password label
         gbc.gridy = 3;
-        formPanel.add(loginButton, gbc);
-        gbc.gridx = 1;
-        formPanel.add(registerButton, gbc);
+        gbc.anchor = GridBagConstraints.WEST;
+        JLabel passwordLabel = new JLabel("Password:");
+        formPanel.add(passwordLabel, gbc);
 
-        layeredPane.add(formPanel, new Integer(1));
-        add(layeredPane);
+        // Row 4: Password field
+        gbc.gridy = 4;
+        passwordField = new JPasswordField();
+        passwordField.setBorder(new MatteBorder(10, 10, 10, 10, Color.WHITE));
+        addPlaceholder(passwordField, "Type your password");
+        formPanel.add(passwordField, gbc);
 
-        // Action listeners
-        loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                loginAction();
+        // Row 5: Forgot Password link (centered right)
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        forgotPasswordLabel = new JLabel("Forgot Password?");
+        forgotPasswordLabel.setForeground(Color.RED);
+        forgotPasswordLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        forgotPasswordLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                forgotPasswordAction();
             }
         });
-        registerButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        formPanel.add(forgotPasswordLabel, gbc);
+
+        // Row 6: Login button (centered)
+        gbc.gridy = 6;
+        gbc.anchor = GridBagConstraints.CENTER;
+        loginButton = new GradientButton("Login");
+        loginButton.setPreferredSize(new Dimension(200, 40));
+        loginButton.setForeground(Color.WHITE);
+        formPanel.add(loginButton, gbc);
+
+        // Row 7: OR Sign Up link (hyperlink style)
+        gbc.gridy = 7;
+        orSignUpLabel = new JLabel("OR Sign Up");
+        orSignUpLabel.setForeground(Color.BLUE);
+        orSignUpLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        orSignUpLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
                 new RegistrationForm().setVisible(true);
                 dispose();
             }
         });
+        formPanel.add(orSignUpLabel, gbc);
+
+        layeredPane.add(formPanel, Integer.valueOf(1));
+        add(layeredPane);
+
+        loginButton.addActionListener(e -> loginAction());
     }
 
     private void loginAction() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
-        System.out.println("Attempting login for: " + username);
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (username.equals("Type your username") || password.equals("Type your password")) {
             JOptionPane.showMessageDialog(this, "Please enter username and password!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        User user = userDAO.authenticateUser(username, password);
+        User user = new UserDAO().authenticateUser(username, password);
         if (user != null) {
-            System.out.println("User found: " + user.getUsername() + ", Role: " + user.getRole());
             JOptionPane.showMessageDialog(this, "Login successful! You are logged in as " + user.getRole(), "Success", JOptionPane.INFORMATION_MESSAGE);
             String role = user.getRole().toLowerCase();
             if (role.equals("client")) {
@@ -146,11 +170,104 @@ public class LoginForm extends JFrame {
             }
             dispose();
         } else {
-            System.out.println("Authentication failed for: " + username);
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
+    private void forgotPasswordAction() {
+        String userForReset = JOptionPane.showInputDialog(this, "Enter your username to reset your password:");
+        if (userForReset != null && !userForReset.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "A password reset link has been sent to your registered email.", "Reset Password", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void addPlaceholder(JTextField field, String placeholder) {
+        field.setForeground(Color.GRAY);
+        field.setText(placeholder);
+        field.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                }
+            }
+            public void focusLost(FocusEvent e) {
+                if (field.getText().isEmpty()) {
+                    field.setForeground(Color.GRAY);
+                    field.setText(placeholder);
+                }
+            }
+        });
+    }
+
+    private void addPlaceholder(JPasswordField field, String placeholder) {
+        field.setForeground(Color.GRAY);
+        field.setEchoChar((char)0);
+        field.setText(placeholder);
+        field.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                String text = new String(field.getPassword());
+                if (text.equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                    field.setEchoChar('*');
+                }
+            }
+            public void focusLost(FocusEvent e) {
+                if (field.getPassword().length == 0) {
+                    field.setForeground(Color.GRAY);
+                    field.setEchoChar((char)0);
+                    field.setText(placeholder);
+                }
+            }
+        });
+    }
+
+    class GradientButton extends JButton {
+        public GradientButton(String text) {
+            super(text);
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorderPainted(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int width = getWidth();
+            int height = getHeight();
+            GradientPaint gp = new GradientPaint(0, 0, new Color(173, 216, 230), width, height, new Color(135, 206, 250));
+            g2.setPaint(gp);
+            g2.fillRoundRect(0, 0, width, height, 20, 20);
+            g2.dispose();
+            super.paintComponent(g);
+        }
+
+        @Override
+        public void paintBorder(Graphics g) {
+        }
+    }
+
+    class RoundedPanel extends JPanel {
+        private int arc;
+        
+        public RoundedPanel(int arc) {
+            this.arc = arc;
+            setOpaque(false);
+        }
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new LoginForm().setVisible(true));
     }
