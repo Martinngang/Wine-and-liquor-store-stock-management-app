@@ -12,10 +12,6 @@ package liquorstoremanagement.ui;
 import java.awt.*;
 import javax.swing.*;
 
-/**
- * A FlowLayout that supports wrapping of components.
- * (Source: https://tips4java.wordpress.com/2008/11/06/wrap-layout/)
- */
 public class WrapLayout extends FlowLayout {
     public WrapLayout() {
         super();
