@@ -69,7 +69,6 @@ public class LoginForm extends JFrame {
         gbc.insets = new Insets(7, 5, 7, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Row 0: Logo
         if (logoImage != null) {
             JLabel logoLabel = new JLabel(new ImageIcon(logoImage.getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
             gbc.gridx = 0;
@@ -80,28 +79,23 @@ public class LoginForm extends JFrame {
         }
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-
-        // Row 1: Username label
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
         JLabel usernameLabel = new JLabel("Username:");
         formPanel.add(usernameLabel, gbc);
 
-        // Row 2: Username field
         gbc.gridy = 2;
         usernameField = new JTextField();
         usernameField.setBorder(new MatteBorder(10, 10, 10, 10, Color.WHITE));
         addPlaceholder(usernameField, "Type your username");
         formPanel.add(usernameField, gbc);
 
-        // Row 3: Password label
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.WEST;
         JLabel passwordLabel = new JLabel("Password:");
         formPanel.add(passwordLabel, gbc);
 
-        // Row 4: Password field
         gbc.gridy = 4;
         passwordField = new JPasswordField();
         passwordField.setBorder(new MatteBorder(10, 10, 10, 10, Color.WHITE));
