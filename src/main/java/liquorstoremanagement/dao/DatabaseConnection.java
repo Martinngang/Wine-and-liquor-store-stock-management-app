@@ -14,14 +14,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    // Update the URL, USER, and PASSWORD as per your database configuration.
     private static final String URL = "jdbc:mysql://localhost:3306/liquor_store";
     private static final String USER = "root";
     private static final String PASSWORD = "56789";
 
     public static Connection getConnection() {
         try {
-            // For JDBC 4.0 and above, the driver is auto-loaded if in the classpath.
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
