@@ -8,10 +8,10 @@ import java.util.Date;
 
 public class Sale {
     private int id;
-    private int productId;      // The ID of the product sold
+    private int productId;
     private int quantitySold;
     private double totalPrice;
-    private Date saleDate;      // The date of the sale
+    private Date saleDate;
 
     // Constructor with id (for existing sales)
     public Sale(int id, int productId, int quantitySold, double totalPrice, Date saleDate) {
